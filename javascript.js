@@ -14,94 +14,94 @@ function getComputerChoice() {
   return choice;
 }
 
-function playRound() {
-  playerSelection = prompt("Please enter your selection").toLowerCase();
+let numberOfRounds = 0;
+let playerScore = 0;
+let computerScore = 0;
+let finalResult;
 
-  computerSelection = getComputerChoice().toLowerCase();
+function playRound(playerSelection) {
+  let computerSelection = getComputerChoice().toLowerCase();
 
+
+  console.log(`player selects: ${playerSelection}; computer selects: ${computerSelection}`);
   let declaration;
   let playerResult;
 
   if (playerSelection === 'rock') {
     if (computerSelection === 'rock') {
-      declaration = "It's a draw!";
-      console.log(declaration);
       playerResult = "draw";
-      return playerResult;
     } else if (computerSelection === 'paper') {
-      declaration = "You lose! Paper beats Rock";
-      console.log(declaration);
       playerResult = "lose";
-      return playerResult;
     } else {
-      declaration = "You win! Rock beats scissor";
-      console.log(declaration);
       playerResult = "win";
-      return playerResult;
     }
   } else if (playerSelection === 'paper') {
     if (computerSelection === 'rock') {
-      declaration = "You win! Paper beats Rock";
-      console.log(declaration);
       playerResult = "win";
-      return playerResult;
     } else if (computerSelection === 'paper') {
-      declaration = "It's a draw!";
-      console.log(declaration);
       playerResult = "draw";
-      return playerResult;
     } else {
-      declaration = "You lose! Scissor beats paper";
-      console.log(declaration);
       playerResult = "lose";
-      return playerResult;
     }
   } else { // playerSelection = 'scissor' in this case
     if (computerSelection === 'rock') {
-      declaration = "You lose! Rock beats scissor";
-      console.log(declaration);
       playerResult = "lose";
-      return playerResult;
     } else if (computerSelection === 'paper') {
-      declaration = "You win! Scissor beats paper";
-      console.log(declaration);
       playerResult = "win";
-      return playerResult;
     } else {
-      declaration = "It's a draw!";
-      console.log(declaration);
       playerResult = "draw";
-      return playerResult;
     }
+  }
+
+  switch (playerResult) {
+    case 'win':
+      declaration = 'You win this round!';
+      playerScore += 1;
+      numberOfRounds += 1;
+      break;
+    case 'lose':
+      declaration = 'You lose this round!';
+      computerScore += 1;
+      numberOfRounds += 1;
+      break;
+    case 'draw':
+      declaration = "It's a draw this round!";
+      numberOfRounds += 1;
+      break;
+  }
+  score.textContent = `player score: ${playerScore} computer score: ${computerScore}\n rounds: ${numberOfRounds}`;
+
+  roundResult.textContent = declaration;
+  if (numberOfRounds === 5) {
+    if (playerScore > computerScore) {
+      finalResult = 'Player wins!';
+    } else if (playerScore < computerScore) {
+      finalResult = 'Computer wins!';
+    } else {
+      finalResult = "It's a draw!"
+    }
+    final.textContent = finalResult;
+    numberOfRounds = 0;
+    playerScore = 0;
+    computerScore = 0
   }
 }
 
-function game() {
-  let numberOfRounds = 0;
-  let playerScore = 0;
-  let computerScore = 0;
-  while (numberOfRounds < 5) {
-    let result = playRound();
-    switch (result) {
-      case 'win':
-        playerScore += 1;
-        break;
-      case 'lose':
-        computerScore += 1;
-        break;
-      case 'draw':
-        break;
-    }
-    numberOfRounds += 1;
-  }
+const rockButton = document.querySelector('#rock')
+rockButton.addEventListener('click', function(e) {
+  playRound(e.target.textContent.toLowerCase());
+});
 
-  if (playerScore > computerScore) {
-    console.log("You are the winner!");
-  } else if (playerScore < computerScore) {
-    console.log("Computer is the winner!");
-  } else {
-    console.log("It's a draw!");
-  }
-}
+const paperButton = document.querySelector('#paper')
+paperButton.addEventListener('click', function(e) {
+  playRound(e.target.textContent.toLowerCase());
+});
 
-game();
+const scissorButton = document.querySelector('#scissor')
+scissorButton.addEventListener('click', function(e) {
+  playRound(e.target.textContent.toLowerCase());
+});
+const roundResult = document.querySelector('#result');
+const score = document.querySelector('#score');
+
+const final = document.querySelector('#finalResult');
